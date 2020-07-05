@@ -1,7 +1,20 @@
 from rest_framework import serializers
-from .models import Request
+from .models import *
 
-class RequestSerializer(serializers.ModelSerializer):
+
+class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Request
-        fields = ['id', 'keyword','res_id']
+        model = Platform
+        fields = ['id', 'name','active']
+
+
+class ResourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resource
+        fields = ['id', 'name', 'platform', 'active']
+
+
+class ManifestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manifest
+        fields = ['id', 'keywords', 'resources','active']
