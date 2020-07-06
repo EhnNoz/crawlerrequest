@@ -1,21 +1,27 @@
 from rest_framework import viewsets, views, mixins
 from django import views
-from request.serializers import ManifestSerializer, PlatformSerializer, ResourceSerializer
-from .models import Platform, Resource, Manifest
+from request import serializers
+from . import models
+
 
 # Create your views here.
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
+    queryset = models.Platform.objects.filter(active=True)
+    serializer_class = serializers.PlatformSerializer
 
 
 class ResourceViewSet(viewsets.ModelViewSet):
-    queryset = Resource.objects.all()
-    serializer_class = ResourceSerializer
+    queryset = models.Resource.objects.filter(active=True)
+    serializer_class = serializers.ResourceSerializer
+
+
+class ConfigViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = models.Config.objects.all()
+    serializer_class = serializers.ConfigSerializer
 
 
 class ManifestViewSet(viewsets.ModelViewSet):
-    queryset = Manifest.objects.all()
-    serializer_class = ManifestSerializer
+    queryset = models.Manifest.objects.filter(active=True)
+    serializer_class = serializers.ManifestSerializer
