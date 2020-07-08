@@ -19,6 +19,18 @@ class PlatformViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.AllowAny]
 
+    @action(detail=True, methods=['delete'])
+    def custom_delete(self, request):
+        if 'platform_id' not in request.data:
+            return response.Response(_("Bad request"), status=400)
+
+        platform_id = request.data['platform_id']
+        p = Platform.objects.filter(name=platform_id)
+        if p.count():
+            p[0].delete()
+            return response.Response(_("Platform deleted successfully"), status=200)
+        else:
+            return response.Response(_("Platform not found"), status=404)
 
 
 class ResourceViewSet(viewsets.ModelViewSet):
